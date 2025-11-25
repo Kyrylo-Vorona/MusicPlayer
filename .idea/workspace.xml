@@ -5,13 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b472c805-ac21-45c5-810f-dc78ae98325d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/HelloApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

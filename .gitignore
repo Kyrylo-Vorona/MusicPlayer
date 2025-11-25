@@ -13,6 +13,7 @@ target/
 *.iml
 *.ipr
 *.mp3
+*.mp4
 ### Eclipse ###
 .apt_generated
 .classpath

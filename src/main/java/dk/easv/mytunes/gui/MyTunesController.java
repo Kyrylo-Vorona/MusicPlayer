@@ -9,7 +9,7 @@ public class MyTunesController {
     MusicFunctions musicFunctions = new MusicFunctions();
     public void btnPlayOnClick(ActionEvent actionEvent) {
         if (musicFunctions.getStatus().equals("PLAYING")) {
-            musicFunctions.stopMusic();
+            musicFunctions.pauseMusic();
         } else {
             musicFunctions.playMusic();
         }

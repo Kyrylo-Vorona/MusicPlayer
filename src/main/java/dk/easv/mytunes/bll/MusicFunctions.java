@@ -11,8 +11,8 @@ public class MusicFunctions {
     public void playMusic() {
         mediaPlayer.play();
     }
-    public void stopMusic() {
-        mediaPlayer.stop();
+    public void pauseMusic() {
+        mediaPlayer.pause();
     }
     public String getStatus() {
         /** Status can be PLAYING, READY or stopped
