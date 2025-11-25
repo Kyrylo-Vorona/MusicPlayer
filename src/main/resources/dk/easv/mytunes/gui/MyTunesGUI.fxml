@@ -34,14 +34,14 @@
                      <font>
                         <Font size="18.0" />
                      </font></Button>
-                  <Slider layoutX="23.0" layoutY="87.0" />
+                  <Slider fx:id="sliderVolume" layoutX="23.0" layoutY="87.0" />
                </children>
             </AnchorPane>
             <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="86.0" prefWidth="397.0" HBox.hgrow="ALWAYS">
                <children>
-                  <Label text="(none)" />
+                  <Label fx:id="lblName" text="(none)" />
                   <Label text=" ... Is playing " />
-                  <Label text="&quot;inserttime&quot;" />
+                  <Label fx:id="lblDuration" />
                </children>
             </HBox>
             <HBox alignment="TOP_RIGHT">
