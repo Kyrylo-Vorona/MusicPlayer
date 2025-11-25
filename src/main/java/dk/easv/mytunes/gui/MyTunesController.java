@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 
 public class MyTunesController {
     @FXML
@@ -16,9 +19,9 @@ public class MyTunesController {
 
     MusicFunctions musicFunctions = new MusicFunctions();
     public void btnPlayOnClick(ActionEvent actionEvent) {
-
         lblDuration.setText(musicFunctions.getDuration());
         lblName.setText(musicFunctions.getMusic());
+
         if (musicFunctions.getStatus().equals("PLAYING")) {
             musicFunctions.pauseMusic();
 
@@ -28,5 +31,12 @@ public class MyTunesController {
         }
     }
 
+    public void sliderOnClick(MouseEvent mouseEvent) {
 
+        musicFunctions.setVolume(sliderVolume.getValue());
+    }
+
+    public void sliderOnMouseDrag(MouseEvent mouseEvent) {
+        musicFunctions.setVolume(sliderVolume.getValue());
+    }
 }

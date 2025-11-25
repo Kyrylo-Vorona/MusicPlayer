@@ -7,9 +7,6 @@ public class MusicFunctions {
     private String bip = "music.mp3";
     private Media hit = new Media(new File(bip).toURI().toString());
     private MediaPlayer mediaPlayer = new MediaPlayer(hit);
-    //private String duration = mediaPlayer.getTotalDuration().toString();
-    //private String durationTrimed = duration.replace("ms", "").trim();
-    //private int durationInt = Integer.parseInt(durationTrimed);
 
     public void playMusic() {
         mediaPlayer.play();
@@ -25,7 +22,8 @@ public class MusicFunctions {
         return mediaPlayer.getStatus().toString();
     }
 
-    public void setVolume(int volume) {
+    public void setVolume(double volume) {
+        double rounded = Math.round(volume * 10) / 10.0;
         mediaPlayer.setVolume(volume);
     }
     public String getDuration() {

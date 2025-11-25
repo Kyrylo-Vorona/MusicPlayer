@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b472c805-ac21-45c5-810f-dc78ae98325d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -103,8 +104,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.26830.84" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
       </set>
     </attachedChunks>
   </component>
@@ -116,6 +117,7 @@
       <option name="presentableId" value="Default" />
       <updated>1763979050585</updated>
       <workItem from="1763979051852" duration="7247000" />
+      <workItem from="1764090805982" duration="5051000" />
     </task>
     <servers />
   </component>
