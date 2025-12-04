@@ -1,26 +1,65 @@
 package dk.easv.mytunes.bll;
-import java.io.File;
+import dk.easv.mytunes.be.Category;
+import dk.easv.mytunes.be.Song;
+import dk.easv.mytunes.dal.DALManager;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class MusicFunctions {
-    private String bip = "music3.mp3";
-    private Media hit = new Media(new File(bip).toURI().toString());
-    private MediaPlayer mediaPlayer = new MediaPlayer(hit);
+import java.io.File;
+import java.util.List;
 
-    public void playMusic() {
-        mediaPlayer.play();
-    }
+public class MusicFunctions {
+
     public void pauseMusic() {
         mediaPlayer.pause();
     }
-    public String getStatus() {
-        /** Status can be PLAYING, READY or stopped
-         * we can use this to play and stop the music
-         * with the same button
-         */
-        return mediaPlayer.getStatus().toString();
+
+    private MediaPlayer mediaPlayer;
+    private String fullDuration;
+    private String status;
+
+
+    String currentSongPath;
+    public void playSong(Song song){
+        if (song.getPath().equals(currentSongPath)) {
+            mediaPlayer.play();
+        }
+        else {
+            if (mediaPlayer != null) {
+                mediaPlayer.stop();
+            }
+            String path = song.getPath();
+            if (path != null && !path.isEmpty() && path.charAt(0) != '/') {
+                Media hit = new Media(new File(song.getPath()).toURI().toString());
+                mediaPlayer = new MediaPlayer(hit);
+                mediaPlayer.play();
+                currentSongPath = song.getPath();
+
+            } else {
+                Media hit = new Media(getClass().getResource(song.getPath()).toExternalForm());
+                mediaPlayer = new MediaPlayer(hit);
+                mediaPlayer.play();
+                currentSongPath = song.getPath();
+            }
+        }
     }
+
+    public String getStatus() {
+        if (mediaPlayer == null) {
+            return "STOPPED";
+        } else {
+            return mediaPlayer.getStatus().toString();
+        }
+    }
+
+    public void setStatus(String newStatus) {
+        if (mediaPlayer != null) {
+            status = newStatus;
+        } else {
+            status = "STOPPED";
+        }
+    }
+
 
     public void setVolume(double volume) {
         double rounded = Math.round(volume * 10) / 10.0;
@@ -41,17 +80,57 @@ public class MusicFunctions {
 
         return fullDuration;
     }
-    public String getMusic() {
-        if(bip.contains(".wav"))
-            return bip.replace(".wav", "").trim();
-        else{
-            return bip.replace(".mp3", "").trim();
-        }
-    }
+
 
     public void restartMusic() {
         mediaPlayer.stop();
         mediaPlayer.play();
     }
 
+    public void playMusic() {
+        if (mediaPlayer != null) {
+            mediaPlayer.play();
+        }
+    }
+    private static MusicFunctions instance;
+
+    public static MusicFunctions getInstance()
+    {
+        if (instance == null)
+        {
+            instance = new MusicFunctions();
+        }
+
+        return instance;
+    }
+
+    public void deleteSong(Song song){
+        DALManager.getInstance().deleteSong(song);
+    }
+
+    public void addSong(String title, String artist, int seconds, String file, Category category) {
+        DALManager.getInstance().addSong(title, artist, seconds, file, category);
+    }
+
+    public MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
+
+    public void editSong(Song song) {
+        DALManager.getInstance().editSong(song);
+    }
+
+
+
+    private MusicFunctions() {}
+
+    public List<Song> getAllSongs()
+    {
+        return DALManager.getInstance().getAllSongs();
+    }
+
+    public List<Category>  getAllCategories()
+    {
+        return DALManager.getInstance().getAllCategories();
+    }
 }

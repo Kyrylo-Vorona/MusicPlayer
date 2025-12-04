@@ -1,4 +1,4 @@
-package dk.easv.mytunes;
+package dk.easv.mytunes.gui;
 
 import javafx.application.Application;
 

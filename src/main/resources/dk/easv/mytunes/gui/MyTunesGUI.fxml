@@ -22,7 +22,7 @@
          <children>
             <AnchorPane>
                <children>
-                  <Button graphicTextGap="1.0" layoutX="68.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnPlayOnClick" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 100;" styleClass="" text="▶">
+                  <Button fx:id="btnPlay" graphicTextGap="1.0" layoutX="68.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#btnPlayOnClick" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 100;" styleClass="" text="▶">
                      <font>
                         <Font size="24.0" />
                      </font></Button>
@@ -103,19 +103,19 @@
             <VBox maxHeight="1.7976931348623157E308" maxWidth="450.0" prefHeight="200.0" prefWidth="450.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Songs" />
-                  <TableView maxHeight="1.7976931348623157E308" maxWidth="450.0" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tableSongs" maxHeight="1.7976931348623157E308" maxWidth="450.0" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn minWidth="150.0" prefWidth="150.0" text="Title" />
-                      <TableColumn minWidth="150.0" prefWidth="150.0" text="Artist" />
-                        <TableColumn minWidth="75.0" prefWidth="75.0" text="Category" />
-                        <TableColumn minWidth="75.0" prefWidth="75.0" text="Time" />
+                      <TableColumn fx:id="columnTitle" minWidth="150.0" prefWidth="150.0" text="Title" />
+                      <TableColumn fx:id="columnArtist" minWidth="150.0" prefWidth="150.0" text="Artist" />
+                        <TableColumn fx:id="columnCategory" minWidth="75.0" prefWidth="75.0" text="Category" />
+                        <TableColumn fx:id="columnTime" minWidth="75.0" prefWidth="75.0" text="Time" />
                     </columns>
                   </TableView>
                   <HBox maxHeight="30.0" maxWidth="300.0" prefHeight="30.0" prefWidth="300.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Button mnemonicParsing="false" onAction="#btnNewSongOnClick" text="New.." />
-                        <Button mnemonicParsing="false" text="Edit" />
-                        <Button mnemonicParsing="false" text="Edit" />
+                        <Button mnemonicParsing="false" onAction="#btnEditSongOnClick" text="Edit" />
+                        <Button mnemonicParsing="false" onAction="#btnDeleteSongOnClick" text="Delete" />
                         <Button mnemonicParsing="false" text="Close" />
                      </children>
                   </HBox>
