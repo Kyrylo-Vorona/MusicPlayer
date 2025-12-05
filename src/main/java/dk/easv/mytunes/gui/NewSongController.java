@@ -116,6 +116,12 @@ public class NewSongController implements Initializable {
     }
 
     @FXML
+    private void onCancelButtonClick(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
     private void chooseSongButtonClick(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(null);

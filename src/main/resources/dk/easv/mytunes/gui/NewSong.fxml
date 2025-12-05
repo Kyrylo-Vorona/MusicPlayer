@@ -56,7 +56,7 @@
       <ComboBox fx:id="categoryComboBox" layoutX="93.0" layoutY="116.0" prefWidth="150.0" />
       <Button layoutX="257.0" layoutY="116.0" mnemonicParsing="false" text="More..." />
       <Button fx:id="chooseButton" layoutX="258.0" layoutY="180.0" mnemonicParsing="false" onAction="#chooseSongButtonClick" text="Choose..." />
-      <Button fx:id="cancelButton" layoutX="264.0" layoutY="254.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="cancelButton" layoutX="264.0" layoutY="254.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
       <Button fx:id="saveButton" layoutX="331.0" layoutY="254.0" mnemonicParsing="false" onAction="#onAddSongButtonClick" text="Save" />
    </children>
 </AnchorPane>
