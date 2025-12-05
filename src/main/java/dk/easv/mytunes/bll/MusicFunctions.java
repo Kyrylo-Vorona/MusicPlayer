@@ -105,11 +105,11 @@ public class MusicFunctions {
     }
 
     public void deleteSong(Song song){
-        DALManager.getInstance().deleteSong(song);
+        DALManager.getInstance().getSongDAO().deleteSong(song);
     }
 
     public void addSong(String title, String artist, int seconds, String file, Category category) {
-        DALManager.getInstance().addSong(title, artist, seconds, file, category);
+        DALManager.getInstance().getSongDAO().addSong(title, artist, seconds, file, category);
     }
 
     public MediaPlayer getMediaPlayer() {
@@ -117,7 +117,7 @@ public class MusicFunctions {
     }
 
     public void editSong(Song song) {
-        DALManager.getInstance().editSong(song);
+        DALManager.getInstance().getSongDAO().editSong(song);
     }
 
 
@@ -126,11 +126,11 @@ public class MusicFunctions {
 
     public List<Song> getAllSongs()
     {
-        return DALManager.getInstance().getAllSongs();
+        return DALManager.getInstance().getSongDAO().getAllSongs();
     }
 
     public List<Category>  getAllCategories()
     {
-        return DALManager.getInstance().getAllCategories();
+        return DALManager.getInstance().getCategoryDAO().getAllCategories();
     }
 }
