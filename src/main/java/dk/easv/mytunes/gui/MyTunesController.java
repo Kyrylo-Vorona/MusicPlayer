@@ -150,17 +150,22 @@ public class MyTunesController implements Initializable {
     }
 
     public void btnBckOnClick(ActionEvent actionEvent) {
-        /**
-         * !!!!!!TODO!!!!!!!!!
-         * First click restarts the music
-         * and the second one goes back one track
-         * if there is none then nothing happens or goes the last element of the playlist
-         */
-        musicFunctions.restartMusic();
-
+        int index = tableSongs.getSelectionModel().getSelectedIndex();
+        if (index <= 0) {
+            return;
+        }
+        tableSongs.getSelectionModel().selectPrevious();
+        btnPlayOnClick(actionEvent);
     }
 
-
+    public void btnNxtOnClick(ActionEvent actionEvent) {
+        int index = tableSongs.getSelectionModel().getSelectedIndex();
+        if (index == tableSongs.getItems().size() - 1) {
+            return;
+        }
+        tableSongs.getSelectionModel().selectNext();
+        btnPlayOnClick(actionEvent);
+    }
 
 
 

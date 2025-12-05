@@ -82,10 +82,6 @@ public class MusicFunctions {
     }
 
 
-    public void restartMusic() {
-        mediaPlayer.stop();
-        mediaPlayer.play();
-    }
 
     public void playMusic() {
         if (mediaPlayer != null) {
