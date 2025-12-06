@@ -70,7 +70,7 @@ public class NewSongController implements Initializable {
 
     @FXML
     private void onAddSongButtonClick(ActionEvent event) {
-        if (mainController.getIsEditing()) {
+        if (mainController.getSongIsEditing()) {
             if (songToEdit != null) {
                 songToEdit.setTitle(titleTextField.getText());
                 songToEdit.setArtist(artistTextField.getText());

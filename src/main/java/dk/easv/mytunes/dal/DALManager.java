@@ -9,6 +9,7 @@ import java.util.List;
 public class DALManager {
     private SongDAO songDAO;
     private CategoryDAO categoryDAO;
+    private PlaylistDAO playlistDAO;
     private static DALManager instance;
 
     public static DALManager getInstance() {
@@ -32,5 +33,10 @@ public class DALManager {
     public CategoryDAO getCategoryDAO() {
         if (categoryDAO == null) categoryDAO = new CategoryDAO();
         return categoryDAO;
+    }
+
+    public PlaylistDAO getPlaylistDAO() {
+        if (playlistDAO == null) playlistDAO = new PlaylistDAO();
+        return playlistDAO;
     }
 }

@@ -1,5 +1,6 @@
 package dk.easv.mytunes.gui;
 
+import dk.easv.mytunes.be.Playlist;
 import dk.easv.mytunes.be.Song;
 import dk.easv.mytunes.bll.*;
 import javafx.collections.FXCollections;
@@ -40,9 +41,19 @@ public class MyTunesController implements Initializable {
     private TableView<Song> tableSongs;
     private ObservableList<Song> songList;
     @FXML
+    private TableView<Playlist> tablePlaylists;
+    @FXML
+    private TableColumn columnName;
+    @FXML
+    private TableColumn columnSongs;
+    @FXML
+    private TableColumn columnTotalTime;
+    private ObservableList<Playlist> playlistList;
+    @FXML
     MusicFunctions musicFunctions = MusicFunctions.getInstance();
     private Song currentSong;
-    private boolean isEditing;
+    private boolean songIsEditing;
+    private boolean playlistIsEditing;
 
 
     public void btnPlayOnClick(ActionEvent actionEvent) {
@@ -95,7 +106,7 @@ public class MyTunesController implements Initializable {
     }
 
     public void btnNewSongOnClick(ActionEvent actionEvent) {
-        isEditing = false;
+        songIsEditing = false;
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("NewSong.fxml"));
             Parent root = loader.load();
@@ -117,7 +128,7 @@ public class MyTunesController implements Initializable {
         if (selected == null) {
             return;
         }
-        isEditing = true;
+        songIsEditing = true;
         try {
             FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("NewSong.fxml"));
             Parent root = loader.load();
@@ -136,8 +147,77 @@ public class MyTunesController implements Initializable {
         }
     }
 
-    public boolean getIsEditing() {
-        return isEditing;
+    public void btnNewPlaylistOnClick(ActionEvent actionEvent) {
+        playlistIsEditing = false;
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("NewPlaylist.fxml"));
+            Parent root = loader.load();
+            NewPlaylistController controller = loader.getController();
+            controller.setMainController(this);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Add");
+            stage.setScene(scene);
+            stage.show();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void btnEditPlaylistOnClick(ActionEvent actionEvent) {
+        Playlist selected = tablePlaylists.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            return;
+        }
+        playlistIsEditing = true;
+        try {
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("NewPlaylist.fxml"));
+            Parent root = loader.load();
+            NewPlaylistController controller = loader.getController();
+            controller.setMainController(this);
+            controller.setPlaylistToEdit(selected);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Edit");
+            stage.setScene(scene);
+            stage.show();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void btnDeletePlaylistOnClick(ActionEvent actionEvent) {
+        try {
+            Playlist selected = tablePlaylists.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(HelloApplication.class.getResource("DeletePlaylist.fxml"));
+            Parent root = loader.load();
+            DeletePlaylistController controller = loader.getController();
+            controller.setPlaylist(selected);
+            controller.setMainController(this);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Delete");
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean getSongIsEditing() {
+        return songIsEditing;
+    }
+
+    public boolean getPlaylistIsEditing() {
+        return playlistIsEditing;
     }
 
     public void sliderOnClick(MouseEvent mouseEvent) {
@@ -178,17 +258,25 @@ public class MyTunesController implements Initializable {
     private void readDataIntoList() {
         songList = FXCollections.observableArrayList();
         songList.addAll(MusicFunctions.getInstance().getAllSongs());
+        playlistList = FXCollections.observableArrayList();
+        playlistList.addAll(MusicFunctions.getInstance().getAllPlaylists());
 
         columnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         columnArtist.setCellValueFactory(new PropertyValueFactory<>("artist"));
         columnCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
         columnTime.setCellValueFactory(new PropertyValueFactory<>("time"));
 
+        columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnSongs.setCellValueFactory(new PropertyValueFactory<>("songs"));
+        columnTotalTime.setCellValueFactory(new PropertyValueFactory<>("time"));
+
         tableSongs.setItems(songList);
+        tablePlaylists.setItems(playlistList);
     }
 
     public void refreshTable() {
         songList.setAll(MusicFunctions.getInstance().getAllSongs());
+        playlistList.setAll(MusicFunctions.getInstance().getAllPlaylists());
     }
 
     @FXML

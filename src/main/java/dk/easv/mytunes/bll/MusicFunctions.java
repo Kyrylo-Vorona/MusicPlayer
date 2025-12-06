@@ -1,5 +1,6 @@
 package dk.easv.mytunes.bll;
 import dk.easv.mytunes.be.Category;
+import dk.easv.mytunes.be.Playlist;
 import dk.easv.mytunes.be.Song;
 import dk.easv.mytunes.dal.DALManager;
 import javafx.scene.media.Media;
@@ -116,7 +117,17 @@ public class MusicFunctions {
         DALManager.getInstance().getSongDAO().editSong(song);
     }
 
+    public void editPlaylist(Playlist playlist) {
+        DALManager.getInstance().getPlaylistDAO().editPlaylist(playlist);
+    }
 
+    public void addPlaylist(String name, int songs, int seconds) {
+        DALManager.getInstance().getPlaylistDAO().addPlaylist(name, songs, seconds);
+    }
+
+    public void deletePlaylist(Playlist playlist) {
+        DALManager.getInstance().getPlaylistDAO().deletePlaylist(playlist);
+    }
 
     private MusicFunctions() {}
 
@@ -128,5 +139,10 @@ public class MusicFunctions {
     public List<Category>  getAllCategories()
     {
         return DALManager.getInstance().getCategoryDAO().getAllCategories();
+    }
+
+    public List<Playlist> getAllPlaylists()
+    {
+        return DALManager.getInstance().getPlaylistDAO().getAllPlaylists();
     }
 }

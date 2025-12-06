@@ -7,7 +7,11 @@
     <list default="true" id="b472c805-ac21-45c5-810f-dc78ae98325d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/dal/DALManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/dal/DALManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/DeleteSongController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/DeleteSongController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/NewSongController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/NewSongController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/DeleteSong.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/DeleteSong.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -18,8 +22,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Class" />
+        <option value="FxmlFile" />
       </list>
     </option>
   </component>
@@ -128,7 +132,7 @@
       <workItem from="1764348971033" duration="16000" />
       <workItem from="1764348999683" duration="3000" />
       <workItem from="1764524913972" duration="40465000" />
-      <workItem from="1764766922821" duration="27522000" />
+      <workItem from="1764766922821" duration="42258000" />
     </task>
     <servers />
   </component>

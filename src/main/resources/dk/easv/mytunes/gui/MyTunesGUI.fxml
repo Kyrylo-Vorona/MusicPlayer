@@ -61,18 +61,18 @@
             <VBox maxHeight="1.7976931348623157E308" maxWidth="260.0" prefHeight="425.0" prefWidth="260.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label alignment="TOP_LEFT" prefHeight="18.0" prefWidth="50.0" text="Playlists" VBox.vgrow="ALWAYS" />
-                  <TableView maxHeight="1.7976931348623157E308" maxWidth="260.0" prefHeight="200.0" prefWidth="260.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tablePlaylists" maxHeight="1.7976931348623157E308" maxWidth="260.0" prefHeight="200.0" prefWidth="260.0" VBox.vgrow="ALWAYS">
                     <columns>
-                      <TableColumn maxWidth="120.0" prefWidth="120.0" text="Name" />
-                      <TableColumn maxWidth="70.0" prefWidth="70.0" text="Songs" />
-                        <TableColumn maxWidth="70.0" prefWidth="70.0" text="Time" />
+                      <TableColumn fx:id="columnName" maxWidth="120.0" prefWidth="120.0" text="Name" />
+                      <TableColumn fx:id="columnSongs" maxWidth="70.0" prefWidth="70.0" text="Songs" />
+                        <TableColumn fx:id="columnTotalTime" maxWidth="70.0" prefWidth="70.0" text="Time" />
                     </columns>
                   </TableView>
                   <HBox maxHeight="30.0" maxWidth="240.0" prefHeight="30.0" prefWidth="240.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" text="New.." />
-                        <Button mnemonicParsing="false" text="Edit" />
-                        <Button mnemonicParsing="false" text="Delete" />
+                        <Button mnemonicParsing="false" onAction="#btnNewPlaylistOnClick" text="New.." />
+                        <Button mnemonicParsing="false" onAction="#btnEditPlaylistOnClick" text="Edit" />
+                        <Button mnemonicParsing="false" onAction="#btnDeletePlaylistOnClick" text="Delete" />
                      </children>
                   </HBox>
                </children>
