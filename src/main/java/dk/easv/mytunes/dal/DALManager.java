@@ -10,6 +10,7 @@ public class DALManager {
     private SongDAO songDAO;
     private CategoryDAO categoryDAO;
     private PlaylistDAO playlistDAO;
+    private PlaylistSongsDAO  playlistSongsDAO;
     private static DALManager instance;
 
     public static DALManager getInstance() {
@@ -38,5 +39,10 @@ public class DALManager {
     public PlaylistDAO getPlaylistDAO() {
         if (playlistDAO == null) playlistDAO = new PlaylistDAO();
         return playlistDAO;
+    }
+
+    public PlaylistSongsDAO getSongsInPlaylistDAO() {
+        if (playlistSongsDAO == null) playlistSongsDAO = new PlaylistSongsDAO();
+        return playlistSongsDAO;
     }
 }

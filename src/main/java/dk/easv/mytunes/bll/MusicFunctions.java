@@ -145,4 +145,8 @@ public class MusicFunctions {
     {
         return DALManager.getInstance().getPlaylistDAO().getAllPlaylists();
     }
+
+    public List<Song> getSongsInPlaylist(int playlistId) {
+        return DALManager.getInstance().getSongsInPlaylistDAO().getSongsInPlaylist(playlistId);
+    }
 }

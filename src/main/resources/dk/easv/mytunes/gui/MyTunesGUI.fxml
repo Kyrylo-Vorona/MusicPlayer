@@ -83,7 +83,7 @@
             <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="425.0" prefWidth="240.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Songs on playlist" />
-                  <ListView maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="240.0" VBox.vgrow="ALWAYS" />
+                  <ListView fx:id="ListSongsInPlaylist" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#playFromPlaylist" prefHeight="200.0" prefWidth="240.0" VBox.vgrow="ALWAYS" />
                   <HBox maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Button mnemonicParsing="false" text="Button" />
@@ -103,7 +103,7 @@
             <VBox maxHeight="1.7976931348623157E308" maxWidth="450.0" prefHeight="200.0" prefWidth="450.0" HBox.hgrow="ALWAYS">
                <children>
                   <Label text="Songs" />
-                  <TableView fx:id="tableSongs" maxHeight="1.7976931348623157E308" maxWidth="450.0" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
+                  <TableView fx:id="tableSongs" maxHeight="1.7976931348623157E308" maxWidth="450.0" onMouseClicked="#playFromMainList" prefHeight="200.0" prefWidth="450.0" VBox.vgrow="ALWAYS">
                     <columns>
                       <TableColumn fx:id="columnTitle" minWidth="150.0" prefWidth="150.0" text="Title" />
                       <TableColumn fx:id="columnArtist" minWidth="150.0" prefWidth="150.0" text="Artist" />
