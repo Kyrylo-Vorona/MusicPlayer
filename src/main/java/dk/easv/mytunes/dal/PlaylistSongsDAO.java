@@ -1,6 +1,9 @@
 package dk.easv.mytunes.dal;
 
+import dk.easv.mytunes.be.Playlist;
+import dk.easv.mytunes.be.PlaylistSongs;
 import dk.easv.mytunes.be.Song;
+import dk.easv.mytunes.be.SongInPlaylist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,8 +20,8 @@ public class PlaylistSongsDAO {
         cm = new ConnectionManager();
     }
 
-    public List<Song> getSongsInPlaylist(int playlistId) {
-        List<Song> songsInPlaylist = new ArrayList<>();
+    public List<SongInPlaylist> getSongsInPlaylist(int playlistId) {
+        List<SongInPlaylist> songsInPlaylist = new ArrayList<>();
 
         try (Connection con = cm.getConnection()) {
             String sql = "SELECT " +
@@ -32,7 +35,7 @@ public class PlaylistSongsDAO {
                     "ORDER BY ps.Position;";
 
             PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, playlistId);              // ← передаём ID плейлиста!
+            pstmt.setInt(1, playlistId);
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -40,12 +43,16 @@ public class PlaylistSongsDAO {
                 Song song = new Song(
                         rs.getInt("Id"),
                         rs.getString("Title"),
-                        null,                   // Artist и Category у тебя не нужны сейчас
-                        null,                   // можешь убрать это поле из конструктора, если мешает
-                        0,                      // Time тоже не извлекаем
+                        null,
+                        null,
+                        0,
                         rs.getString("File")
                 );
-                songsInPlaylist.add(song);
+
+                songsInPlaylist.add(new SongInPlaylist(
+                        song,
+                        rs.getInt("position")
+                ));
             }
 
         } catch (SQLException e) {
@@ -55,4 +62,30 @@ public class PlaylistSongsDAO {
         return songsInPlaylist;
     }
 
+    public void addSongToPlaylist(int position, Song song, Playlist playlist) {
+        try (Connection con = cm.getConnection()) {
+            String sql = "INSERT INTO PlaylistSongs (Position, SongId, PlaylistId) VALUES (?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, position);
+            pstmt.setInt(2, song.getId());
+            pstmt.setInt(3, playlist.getId());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e)  {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteSongFromPlaylist(int position, Playlist playlist, Song song) {
+        try (Connection con = cm.getConnection()) {
+            String sql = "DELETE FROM PlaylistSongs WHERE position = ? AND PlaylistId = ? AND SongId = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, position);
+            pstmt.setInt(2, playlist.getId());
+            pstmt.setInt(3, song.getId());
+            pstmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

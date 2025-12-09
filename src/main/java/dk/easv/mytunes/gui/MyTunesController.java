@@ -1,7 +1,9 @@
 package dk.easv.mytunes.gui;
 
 import dk.easv.mytunes.be.Playlist;
+import dk.easv.mytunes.be.PlaylistSongs;
 import dk.easv.mytunes.be.Song;
+import dk.easv.mytunes.be.SongInPlaylist;
 import dk.easv.mytunes.bll.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +27,8 @@ public class MyTunesController implements Initializable {
     private Label lblName;
     @FXML
     private Button btnPlay;
+    @FXML
+    private Button btnAddSongToPlaylist;
     @FXML
     private Label lblDuration;
     @FXML
@@ -50,8 +54,8 @@ public class MyTunesController implements Initializable {
     private TableColumn columnTotalTime;
     private ObservableList<Playlist> playlistList;
     @FXML
-    private ListView<Song> ListSongsInPlaylist;
-    private ObservableList<Song> songsInPlaylist;
+    private ListView<SongInPlaylist> ListSongsInPlaylist;
+    private ObservableList<SongInPlaylist> songsInPlaylist;
     @FXML
     MusicFunctions musicFunctions = MusicFunctions.getInstance();
     private Song currentSong;
@@ -87,9 +91,12 @@ public class MyTunesController implements Initializable {
     }
 
     public void playFromPlaylist(MouseEvent mouseEvent) {
-        selected = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
-
+        SongInPlaylist sip = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+        if (sip != null) {
+            selected = sip.getSong();
+        }
     }
+
 
     public void playFromMainList(MouseEvent mouseEvent) {
         selected = tableSongs.getSelectionModel().getSelectedItem();
@@ -246,6 +253,9 @@ public class MyTunesController implements Initializable {
     }
 
     public void btnBckOnClick(ActionEvent actionEvent) {
+        boolean isInPlaylist = ListSongsInPlaylist.getItems().stream()
+                .anyMatch(sip -> sip.getSong().equals(currentSong));
+
         if (tableSongs.getItems().contains(currentSong)) {
             int index = tableSongs.getSelectionModel().getSelectedIndex();
             if (index <= 0) {
@@ -255,18 +265,23 @@ public class MyTunesController implements Initializable {
             selected =  tableSongs.getSelectionModel().getSelectedItem();
             btnPlayOnClick(actionEvent);
             }
-        else if (ListSongsInPlaylist.getItems().contains(currentSong)) {
+
+        else if (isInPlaylist) {
             int index = ListSongsInPlaylist.getSelectionModel().getSelectedIndex();
             if (index <= 0) {
                 return;
             }
             ListSongsInPlaylist.getSelectionModel().selectPrevious();
-            selected =  ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+            SongInPlaylist sip = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+            if (sip != null) selected = sip.getSong();
             btnPlayOnClick(actionEvent);
         }
     }
 
     public void btnNxtOnClick(ActionEvent actionEvent) {
+        boolean isInPlaylist = ListSongsInPlaylist.getItems().stream()
+                .anyMatch(sip -> sip.getSong().equals(currentSong));
+
         if (tableSongs.getItems().contains(currentSong)) {
             int index = tableSongs.getSelectionModel().getSelectedIndex();
             if (index == tableSongs.getItems().size() - 1) {
@@ -276,18 +291,44 @@ public class MyTunesController implements Initializable {
             selected =  tableSongs.getSelectionModel().getSelectedItem();
             btnPlayOnClick(actionEvent);
         }
-        else if (ListSongsInPlaylist.getItems().contains(currentSong)) {
+        else if (isInPlaylist) {
             int index = ListSongsInPlaylist.getSelectionModel().getSelectedIndex();
             if (index == ListSongsInPlaylist.getItems().size() - 1) {
                 return;
             }
             ListSongsInPlaylist.getSelectionModel().selectNext();
-            selected =  ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+            SongInPlaylist sip = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+            if (sip != null) selected = sip.getSong();
             btnPlayOnClick(actionEvent);
         }
     }
 
+    @FXML
+    public void addSongToPlaylist(ActionEvent actionEvent) {
+        Playlist selectedPlaylist = tablePlaylists.getSelectionModel().getSelectedItem();
+        Song selectedSong = tableSongs.getSelectionModel().getSelectedItem();
+        if (selectedPlaylist == null || selectedSong == null) {
+            return;
+        }
+        int position = ListSongsInPlaylist.getItems().size() + 1;
 
+        PlaylistSongs playlistSongs = new PlaylistSongs(position, selectedSong, selectedPlaylist);
+        musicFunctions.addSongToPlaylist(position, selectedSong, selectedPlaylist);
+        readDataIntoPlaylist();
+    }
+
+    @FXML
+    public void deleteSongfromPlaylist(ActionEvent actionEvent) {
+        Playlist playlist = tablePlaylists.getSelectionModel().getSelectedItem();
+        SongInPlaylist songInPlaylist = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+        if (playlist == null || songInPlaylist == null) {
+            return;
+        }
+        int position = songInPlaylist.getPosition();
+        Song song = songInPlaylist.getSong();
+        musicFunctions.deleteSongInPlaylist(position, playlist, song);
+        readDataIntoPlaylist();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb)
@@ -296,7 +337,7 @@ public class MyTunesController implements Initializable {
         tablePlaylists.getSelectionModel().selectedItemProperty().addListener((obs, oldPlaylist, newPlaylist) -> {
             readDataIntoPlaylist();
         });
-
+        btnAddSongToPlaylist.setText("\u2B05");
     }
 
     private void readDataIntoList() {

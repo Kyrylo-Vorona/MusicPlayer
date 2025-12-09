@@ -2,6 +2,7 @@ package dk.easv.mytunes.bll;
 import dk.easv.mytunes.be.Category;
 import dk.easv.mytunes.be.Playlist;
 import dk.easv.mytunes.be.Song;
+import dk.easv.mytunes.be.SongInPlaylist;
 import dk.easv.mytunes.dal.DALManager;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -109,6 +110,14 @@ public class MusicFunctions {
         DALManager.getInstance().getSongDAO().addSong(title, artist, seconds, file, category);
     }
 
+    public void addSongToPlaylist(int position, Song song, Playlist playlist) {
+        DALManager.getInstance().getSongsInPlaylistDAO().addSongToPlaylist(position, song, playlist);
+    }
+
+    public void deleteSongInPlaylist(int position, Playlist playlist, Song song) {
+        DALManager.getInstance().getSongsInPlaylistDAO().deleteSongFromPlaylist(position, playlist, song);
+    }
+
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
@@ -146,7 +155,7 @@ public class MusicFunctions {
         return DALManager.getInstance().getPlaylistDAO().getAllPlaylists();
     }
 
-    public List<Song> getSongsInPlaylist(int playlistId) {
+    public List<SongInPlaylist> getSongsInPlaylist(int playlistId) {
         return DALManager.getInstance().getSongsInPlaylistDAO().getSongsInPlaylist(playlistId);
     }
 }

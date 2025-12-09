@@ -6,9 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="b472c805-ac21-45c5-810f-dc78ae98325d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/be/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/be/Song.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/bll/MusicFunctions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/dal/DALManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/dal/DALManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/dal/PlaylistSongsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/dal/PlaylistSongsDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dk/easv/mytunes/gui/MyTunesController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/dk/easv/mytunes/gui/MyTunesGUI.fxml" afterDir="false" />
     </list>
@@ -130,7 +129,7 @@
       <workItem from="1764348971033" duration="16000" />
       <workItem from="1764348999683" duration="3000" />
       <workItem from="1764524913972" duration="40465000" />
-      <workItem from="1764766922821" duration="61642000" />
+      <workItem from="1764766922821" duration="79313000" />
     </task>
     <servers />
   </component>
