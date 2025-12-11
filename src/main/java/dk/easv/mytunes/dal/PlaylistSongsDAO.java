@@ -64,12 +64,22 @@ public class PlaylistSongsDAO {
 
     public void addSongToPlaylist(int position, Song song, Playlist playlist) {
         try (Connection con = cm.getConnection()) {
-            String sql = "INSERT INTO PlaylistSongs (Position, SongId, PlaylistId) VALUES (?, ?, ?)";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, position);
-            pstmt.setInt(2, song.getId());
-            pstmt.setInt(3, playlist.getId());
-            pstmt.executeUpdate();
+            String insertSql = "INSERT INTO PlaylistSongs (Position, SongId, PlaylistId) VALUES (?, ?, ?)";
+            String updateSql = "UPDATE Playlists SET Songs = ?, Time = ? WHERE Id = ?";
+            PreparedStatement insert = con.prepareStatement(insertSql);
+            insert.setInt(1, position);
+            insert.setInt(2, song.getId());
+            insert.setInt(3, playlist.getId());
+            insert.executeUpdate();
+            playlist.setSongs(playlist.getSongs() + 1);
+            playlist.setSeconds(playlist.getSeconds() + song.getSeconds());
+
+            PreparedStatement update = con.prepareStatement(updateSql);
+            update.setInt(1, playlist.getSongs());
+            update.setInt(2, playlist.getSeconds());
+            update.setInt(3, playlist.getId());
+            update.executeUpdate();
+
         }
         catch (SQLException e)  {
             throw new RuntimeException(e);
@@ -78,14 +88,47 @@ public class PlaylistSongsDAO {
 
     public void deleteSongFromPlaylist(int position, Playlist playlist, Song song) {
         try (Connection con = cm.getConnection()) {
-            String sql = "DELETE FROM PlaylistSongs WHERE position = ? AND PlaylistId = ? AND SongId = ?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, position);
-            pstmt.setInt(2, playlist.getId());
-            pstmt.setInt(3, song.getId());
-            pstmt.execute();
+
+            String deleteSql =
+                    "DELETE FROM PlaylistSongs " +
+                            "WHERE Position = ? AND PlaylistId = ? AND SongId = ?";
+
+            PreparedStatement delete = con.prepareStatement(deleteSql);
+            delete.setInt(1, position);
+            delete.setInt(2, playlist.getId());
+            delete.setInt(3, song.getId());
+            delete.executeUpdate();
+
+            String calcSql =
+                    "SELECT COUNT(*) AS cnt, COALESCE(SUM(s.Time), 0) AS total " +
+                            "FROM PlaylistSongs ps " +
+                            "JOIN Songs s ON ps.SongId = s.Id " +
+                            "WHERE ps.PlaylistId = ?";
+
+            PreparedStatement calc = con.prepareStatement(calcSql);
+            calc.setInt(1, playlist.getId());
+            ResultSet rs = calc.executeQuery();
+
+            int count = 0;
+            int totalSeconds = 0;
+
+            if (rs.next()) {
+                count = rs.getInt("cnt");
+                totalSeconds = rs.getInt("total");
+            }
+
+            String updateSql =
+                    "UPDATE Playlists SET Songs = ?, Time = ? WHERE Id = ?";
+
+            PreparedStatement update = con.prepareStatement(updateSql);
+            update.setInt(1, count);
+            update.setInt(2, totalSeconds);
+            update.setInt(3, playlist.getId());
+            update.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
 }

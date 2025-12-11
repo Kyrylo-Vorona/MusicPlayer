@@ -62,6 +62,7 @@ public class MyTunesController implements Initializable {
     private boolean songIsEditing;
     private boolean playlistIsEditing;
     private Song selected;
+    private Playlist currentPlaylist;
 
     public void btnPlayOnClick(ActionEvent actionEvent) {
 
@@ -305,35 +306,48 @@ public class MyTunesController implements Initializable {
 
     @FXML
     public void addSongToPlaylist(ActionEvent actionEvent) {
-        Playlist selectedPlaylist = tablePlaylists.getSelectionModel().getSelectedItem();
         Song selectedSong = tableSongs.getSelectionModel().getSelectedItem();
-        if (selectedPlaylist == null || selectedSong == null) {
-            return;
-        }
-        int position = ListSongsInPlaylist.getItems().size() + 1;
+        if (currentPlaylist == null || selectedSong == null) return;
 
-        PlaylistSongs playlistSongs = new PlaylistSongs(position, selectedSong, selectedPlaylist);
-        musicFunctions.addSongToPlaylist(position, selectedSong, selectedPlaylist);
-        readDataIntoPlaylist();
+        int position = ListSongsInPlaylist.getItems().size() + 1;
+        musicFunctions.addSongToPlaylist(position, selectedSong, currentPlaylist);
+
+        updateSongsInPlaylistView(currentPlaylist);
+        refreshTable();
     }
 
     @FXML
     public void deleteSongfromPlaylist(ActionEvent actionEvent) {
-        Playlist playlist = tablePlaylists.getSelectionModel().getSelectedItem();
-        SongInPlaylist songInPlaylist = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
-        if (playlist == null || songInPlaylist == null) {
-            return;
-        }
-        int position = songInPlaylist.getPosition();
-        Song song = songInPlaylist.getSong();
-        musicFunctions.deleteSongInPlaylist(position, playlist, song);
-        readDataIntoPlaylist();
+        SongInPlaylist selectedSongInPlaylist = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+        if (currentPlaylist == null || selectedSongInPlaylist == null) return;
+
+        musicFunctions.deleteSongInPlaylist(
+                selectedSongInPlaylist.getPosition(),
+                currentPlaylist,
+                selectedSongInPlaylist.getSong()
+        );
+
+        updateSongsInPlaylistView(currentPlaylist);
+        refreshTable();
+    }
+
+    private void updateSongsInPlaylistView(Playlist playlist) {
+        ObservableList<SongInPlaylist> songs = FXCollections.observableArrayList(
+                musicFunctions.getSongsInPlaylist(playlist.getId())
+        );
+        ListSongsInPlaylist.setItems(songs);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
         readDataIntoList();
+        tablePlaylists.getSelectionModel().selectedItemProperty().addListener((obs, oldP, newP) -> {
+            if (newP != null) {
+                currentPlaylist = newP;
+                updateSongsInPlaylistView(currentPlaylist);
+            }
+        });
         tablePlaylists.getSelectionModel().selectedItemProperty().addListener((obs, oldPlaylist, newPlaylist) -> {
             readDataIntoPlaylist();
         });
@@ -360,18 +374,31 @@ public class MyTunesController implements Initializable {
     }
 
     private void readDataIntoPlaylist() {
-        Playlist selected = tablePlaylists.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            songsInPlaylist = FXCollections.observableArrayList();
-            songsInPlaylist.addAll(MusicFunctions.getInstance().getSongsInPlaylist(selected.getId()));
-            ListSongsInPlaylist.setItems(songsInPlaylist);
+
+        if (currentPlaylist != null) {
+            if (songsInPlaylist == null) {
+                songsInPlaylist = FXCollections.observableArrayList();
+                ListSongsInPlaylist.setItems(songsInPlaylist);
+            }
+            songsInPlaylist.setAll(musicFunctions.getSongsInPlaylist(currentPlaylist.getId()));
         }
     }
 
+
     public void refreshTable() {
-        songList.setAll(MusicFunctions.getInstance().getAllSongs());
-        playlistList.setAll(MusicFunctions.getInstance().getAllPlaylists());
+        songList.setAll(musicFunctions.getAllSongs());
+        playlistList.setAll(musicFunctions.getAllPlaylists());
+
+
+        if (currentPlaylist != null) {
+            if (songsInPlaylist == null) {
+                songsInPlaylist = FXCollections.observableArrayList();
+                ListSongsInPlaylist.setItems(songsInPlaylist);
+            }
+            songsInPlaylist.setAll(musicFunctions.getSongsInPlaylist(currentPlaylist.getId()));
+        }
     }
+
 
     @FXML
     public void onCloseButtonClick(ActionEvent event) {

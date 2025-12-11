@@ -16,9 +16,11 @@ public class PlaylistDAO {
 
     public void deletePlaylist(Playlist playlist) {
         try (Connection con = cm.getConnection()) {
-            String sql = "DELETE FROM Playlists WHERE id=?";
+            String sql = "DELETE FROM PlaylistSongs WHERE playlistId=?" +
+                         "DELETE FROM Playlists WHERE id=?";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, playlist.getId());
+            pstmt.setInt(2, playlist.getId());
             pstmt.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
