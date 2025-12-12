@@ -65,8 +65,6 @@ public class MyTunesController implements Initializable {
     private Playlist currentPlaylist;
 
     public void btnPlayOnClick(ActionEvent actionEvent) {
-
-
         if (selected == null) {
             return;
         }
@@ -76,7 +74,7 @@ public class MyTunesController implements Initializable {
             musicFunctions.playSong(selected);
             currentSong = selected;
             btnPlay.setText("||");
-            lblName.setText(selected.getTitle());
+            lblName.setText(currentSong.getTitle());
             lblDuration.setText(musicFunctions.getDuration());
             return;
         }
@@ -87,7 +85,7 @@ public class MyTunesController implements Initializable {
         } else if (musicFunctions.getStatus().equals("PAUSED") || musicFunctions.getStatus().equals("STOPPED")) {
             musicFunctions.playMusic();
             btnPlay.setText("||");
-            lblName.setText(selected.getTitle());
+            lblName.setText(currentSong.getTitle());
         }
     }
 
@@ -304,6 +302,33 @@ public class MyTunesController implements Initializable {
         }
     }
 
+    private void playNext() {
+        boolean isInPlaylist = ListSongsInPlaylist.getItems().stream()
+                .anyMatch(sip -> sip.getSong().equals(currentSong));
+
+        if (isInPlaylist) {
+            int index = ListSongsInPlaylist.getSelectionModel().getSelectedIndex();
+            if (index < ListSongsInPlaylist.getItems().size() - 1) {
+                ListSongsInPlaylist.getSelectionModel().select(index + 1);
+
+                SongInPlaylist next = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+                selected = next.getSong();
+                btnPlayOnClick(null);
+            }
+        }
+        else {
+            int index = tableSongs.getSelectionModel().getSelectedIndex();
+            if (index < tableSongs.getItems().size() - 1) {
+                tableSongs.getSelectionModel().select(index + 1);
+
+                selected = tableSongs.getSelectionModel().getSelectedItem();
+                btnPlayOnClick(null);
+            }
+        }
+    }
+
+
+
     @FXML
     public void addSongToPlaylist(ActionEvent actionEvent) {
         Song selectedSong = tableSongs.getSelectionModel().getSelectedItem();
@@ -352,6 +377,9 @@ public class MyTunesController implements Initializable {
             readDataIntoPlaylist();
         });
         btnAddSongToPlaylist.setText("\u2B05");
+        musicFunctions.setOnSongFinished(() -> {
+            playNext();
+        });
     }
 
     private void readDataIntoList() {
@@ -399,13 +427,10 @@ public class MyTunesController implements Initializable {
         }
     }
 
-
     @FXML
     public void onCloseButtonClick(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
-
-
 
 }

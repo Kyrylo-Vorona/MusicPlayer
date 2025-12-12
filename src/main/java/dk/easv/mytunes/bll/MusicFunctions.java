@@ -19,9 +19,13 @@ public class MusicFunctions {
     private MediaPlayer mediaPlayer;
     private String fullDuration;
     private String status;
-
-
     String currentSongPath;
+    private Runnable onSongFinished;
+
+    public void setOnSongFinished(Runnable callback) {
+        this.onSongFinished = callback;
+    }
+
     public void playSong(Song song){
         if (song.getPath().equals(currentSongPath)) {
             mediaPlayer.play();
@@ -42,6 +46,12 @@ public class MusicFunctions {
                 mediaPlayer = new MediaPlayer(hit);
                 mediaPlayer.play();
                 currentSongPath = song.getPath();
+
+                mediaPlayer.setOnEndOfMedia(() -> {
+                    if (onSongFinished != null) {
+                        onSongFinished.run();
+                    }
+                });
             }
         }
     }

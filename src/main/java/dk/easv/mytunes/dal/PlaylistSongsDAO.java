@@ -125,10 +125,41 @@ public class PlaylistSongsDAO {
             update.setInt(2, totalSeconds);
             update.setInt(3, playlist.getId());
             update.executeUpdate();
+            fixPositions(playlist.getId());
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public void fixPositions(int playlistId) {
+        try (Connection con = cm.getConnection()) {
+
+            String selectSql = "SELECT SongId FROM PlaylistSongs WHERE PlaylistId = ? ORDER BY Position ASC";
+            PreparedStatement select = con.prepareStatement(selectSql);
+            select.setInt(1, playlistId);
+
+            ResultSet rs = select.executeQuery();
+
+            int newPos = 1;
+            String updateSql = "UPDATE PlaylistSongs SET Position = ? WHERE PlaylistId = ? AND SongId = ?";
+            PreparedStatement update = con.prepareStatement(updateSql);
+
+            while (rs.next()) {
+                int songId = rs.getInt("SongId");
+
+                update.setInt(1, newPos);
+                update.setInt(2, playlistId);
+                update.setInt(3, songId);
+                update.executeUpdate();
+
+                newPos++;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
