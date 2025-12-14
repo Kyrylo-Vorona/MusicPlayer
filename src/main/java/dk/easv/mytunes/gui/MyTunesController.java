@@ -28,7 +28,7 @@ public class MyTunesController implements Initializable {
     @FXML
     private Button btnPlay;
     @FXML
-    private Button btnAddSongToPlaylist;
+    private Button btnFilter;
     @FXML
     private Label lblDuration;
     @FXML
@@ -44,6 +44,7 @@ public class MyTunesController implements Initializable {
     @FXML
     private TableView<Song> tableSongs;
     private ObservableList<Song> songList;
+    private ObservableList<Song> filteredSongs;
     @FXML
     private TableView<Playlist> tablePlaylists;
     @FXML
@@ -58,11 +59,49 @@ public class MyTunesController implements Initializable {
     private ObservableList<SongInPlaylist> songsInPlaylist;
     @FXML
     MusicFunctions musicFunctions = MusicFunctions.getInstance();
+    @FXML
+    private TextField txtFilter;
     private Song currentSong;
     private boolean songIsEditing;
     private boolean playlistIsEditing;
     private Song selected;
     private Playlist currentPlaylist;
+    private boolean filterActive = false;
+
+    public void btnFilter(ActionEvent actionEvent) {
+        if (!filterActive) {
+
+            String query = txtFilter.getText();
+            if (query == null || query.isBlank()) {
+                return;
+            }
+
+            String q = query.toLowerCase();
+
+            filteredSongs = FXCollections.observableArrayList();
+
+            for (Song s : songList) {
+                boolean matchTitle = s.getTitle().toLowerCase().contains(q);
+                boolean matchArtist = s.getArtist().toLowerCase().contains(q);
+                boolean matchCategory = s.getCategory().getName().toLowerCase().contains(q);
+
+                if (matchTitle || matchArtist || matchCategory) {
+                    filteredSongs.add(s);
+                }
+            }
+
+            tableSongs.setItems(filteredSongs);
+            filterActive = true;
+            btnFilter.setText("Clear");
+        }
+
+        else {
+            tableSongs.setItems(songList);
+            txtFilter.clear();
+            filterActive = false;
+            btnFilter.setText("Filter");
+        }
+    }
 
     public void btnPlayOnClick(ActionEvent actionEvent) {
         if (selected == null) {
@@ -356,6 +395,32 @@ public class MyTunesController implements Initializable {
         refreshTable();
     }
 
+    @FXML
+    public void moveUp(ActionEvent actionEvent) {
+        SongInPlaylist selectedSongInPlaylist = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+
+        if (currentPlaylist == null || selectedSongInPlaylist == null) return;
+
+        if (selectedSongInPlaylist.getPosition() <= 1) {
+            return;
+        }
+        MusicFunctions.getInstance().moveUp(currentPlaylist.getId(), selectedSongInPlaylist.getPosition());
+        updateSongsInPlaylistView(currentPlaylist);
+    }
+
+    @FXML
+    public void moveDown(ActionEvent actionEvent) {
+        SongInPlaylist selectedSongInPlaylist = ListSongsInPlaylist.getSelectionModel().getSelectedItem();
+
+        if (currentPlaylist == null || selectedSongInPlaylist == null) return;
+
+        int maxPosition = ListSongsInPlaylist.getItems().size();
+
+        if (selectedSongInPlaylist.getPosition() >= maxPosition) return;
+        MusicFunctions.getInstance().moveDown(currentPlaylist.getId(), selectedSongInPlaylist.getPosition());
+        updateSongsInPlaylistView(currentPlaylist);
+    }
+
     private void updateSongsInPlaylistView(Playlist playlist) {
         ObservableList<SongInPlaylist> songs = FXCollections.observableArrayList(
                 musicFunctions.getSongsInPlaylist(playlist.getId())
@@ -376,7 +441,7 @@ public class MyTunesController implements Initializable {
         tablePlaylists.getSelectionModel().selectedItemProperty().addListener((obs, oldPlaylist, newPlaylist) -> {
             readDataIntoPlaylist();
         });
-        btnAddSongToPlaylist.setText("\u2B05");
+
         musicFunctions.setOnSongFinished(() -> {
             playNext();
         });
@@ -412,11 +477,17 @@ public class MyTunesController implements Initializable {
         }
     }
 
+    public void clearCurrentPlaylist() {
+        currentPlaylist = null;
+        if (songsInPlaylist != null) {
+            songsInPlaylist.clear();
+        }
+    }
+
 
     public void refreshTable() {
         songList.setAll(musicFunctions.getAllSongs());
         playlistList.setAll(musicFunctions.getAllPlaylists());
-
 
         if (currentPlaylist != null) {
             if (songsInPlaylist == null) {
@@ -425,7 +496,16 @@ public class MyTunesController implements Initializable {
             }
             songsInPlaylist.setAll(musicFunctions.getSongsInPlaylist(currentPlaylist.getId()));
         }
+        else {
+            if (songsInPlaylist != null) {
+                songsInPlaylist.clear();
+            }
+            ListSongsInPlaylist.setItems(FXCollections.observableArrayList());
+        }
     }
+
+
+
 
     @FXML
     public void onCloseButtonClick(ActionEvent event) {

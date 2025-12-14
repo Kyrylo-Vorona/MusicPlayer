@@ -33,4 +33,25 @@ public class CategoryDAO {
 
         return categories;
     }
+
+    public Category addCategory(String name) {
+        try (Connection con = cm.getConnection()) {
+            String sql = "INSERT INTO Categories (Name) VALUES (?)";
+            PreparedStatement pstmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, name);
+            pstmt.executeUpdate();
+
+            ResultSet keys = pstmt.getGeneratedKeys();
+            if (keys.next()) {
+                int id = keys.getInt(1);
+                return new Category(id, name);
+            } else {
+                throw new SQLException("Category ID not generated");
+            }
+
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 }

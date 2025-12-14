@@ -50,8 +50,8 @@
                      <font>
                         <Font size="14.0" />
                      </font></Label>
-                  <TextField prefHeight="26.0" prefWidth="123.0" />
-                  <Button mnemonicParsing="false" text="&quot;searchicon&quot;" />
+                  <TextField fx:id="txtFilter" prefHeight="26.0" prefWidth="123.0" />
+                  <Button fx:id="btnFilter" mnemonicParsing="false" onAction="#btnFilter" text="Filter" />
                </children>
             </HBox>
          </children>
@@ -86,8 +86,14 @@
                   <ListView fx:id="ListSongsInPlaylist" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#playFromPlaylist" prefHeight="200.0" prefWidth="240.0" VBox.vgrow="ALWAYS" />
                   <HBox maxHeight="30.0" maxWidth="200.0" prefHeight="30.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
+                        <Button mnemonicParsing="false" onAction="#moveUp" text=" ↑ ">
+                           <font>
+                              <Font size="13.0" />
+                           </font></Button>
+                        <Button mnemonicParsing="false" onAction="#moveDown" text=" ↓ ">
+                           <font>
+                              <Font size="13.0" />
+                           </font></Button>
                         <Button mnemonicParsing="false" onAction="#deleteSongfromPlaylist" text="Delete" />
                      </children>
                   </HBox>
@@ -96,7 +102,7 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" />
                </HBox.margin>
             </VBox>
-            <Button fx:id="btnAddSongToPlaylist" mnemonicParsing="false" onAction="#addSongToPlaylist" text="Button">
+            <Button fx:id="btnAddSongToPlaylist" mnemonicParsing="false" onAction="#addSongToPlaylist" text="⬅">
                <HBox.margin>
                   <Insets top="18.0" />
                </HBox.margin></Button>

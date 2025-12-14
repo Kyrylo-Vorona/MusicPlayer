@@ -3,6 +3,7 @@ import dk.easv.mytunes.be.Category;
 import dk.easv.mytunes.be.Playlist;
 import dk.easv.mytunes.be.Song;
 import dk.easv.mytunes.be.SongInPlaylist;
+import dk.easv.mytunes.dal.CategoryDAO;
 import dk.easv.mytunes.dal.DALManager;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -128,6 +129,14 @@ public class MusicFunctions {
         DALManager.getInstance().getSongsInPlaylistDAO().deleteSongFromPlaylist(position, playlist, song);
     }
 
+    public void moveUp(int playlistId, int position) {
+        DALManager.getInstance().getSongsInPlaylistDAO().moveUp(playlistId, position);
+    }
+
+    public void moveDown(int playlistId, int position) {
+        DALManager.getInstance().getSongsInPlaylistDAO().moveDown(playlistId, position);
+    }
+
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
@@ -147,6 +156,11 @@ public class MusicFunctions {
     public void deletePlaylist(Playlist playlist) {
         DALManager.getInstance().getPlaylistDAO().deletePlaylist(playlist);
     }
+
+    public Category addCategory(String name) {
+        return  new CategoryDAO().addCategory(name);
+    }
+
 
     private MusicFunctions() {}
 

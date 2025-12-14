@@ -161,5 +161,55 @@ public class PlaylistSongsDAO {
         }
     }
 
+    public void moveUp(int playlistId, int position) {
+        if (position <= 1) return;
+
+        String sql = "UPDATE PlaylistSongs SET Position = CASE WHEN Position = ? THEN ? WHEN Position = ? THEN ? END WHERE PlaylistId = ? AND Position IN (?, ?)";
+
+        try (Connection con = cm.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setInt(1, position);
+            stmt.setInt(2, position - 1);
+
+            stmt.setInt(3, position - 1);
+            stmt.setInt(4, position);
+
+            stmt.setInt(5, playlistId);
+
+            stmt.setInt(6, position);
+            stmt.setInt(7, position - 1);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void moveDown(int playlistId, int position) {
+
+        String sql = "UPDATE PlaylistSongs SET Position = CASE WHEN Position = ? THEN ? WHEN Position = ? THEN ? END WHERE PlaylistId = ? AND Position IN (?, ?)";
+
+        try (Connection con = cm.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            stmt.setInt(1, position);
+            stmt.setInt(2, position + 1);
+
+            stmt.setInt(3, position + 1);
+            stmt.setInt(4, position);
+
+            stmt.setInt(5, playlistId);
+
+            stmt.setInt(6, position);
+            stmt.setInt(7, position + 1);
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

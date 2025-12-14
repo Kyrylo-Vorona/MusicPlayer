@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -134,5 +135,27 @@ public class NewSongController implements Initializable {
             }
         }
     }
+
+    @FXML
+    private void onAddCategoryMoreClick() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Add New Category");
+        dialog.setHeaderText("Add a new category");
+        dialog.setContentText("Category name:");
+
+        dialog.showAndWait().ifPresent(name -> {
+            if (!name.isBlank() && categories.stream().noneMatch(c -> c.getName().equalsIgnoreCase(name))) {
+                try {
+                    Category newCategory = mf.addCategory(name);
+                    categories.add(newCategory);
+                    categoryComboBox.setItems(categories);
+                    categoryComboBox.setValue(newCategory);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
 }
 

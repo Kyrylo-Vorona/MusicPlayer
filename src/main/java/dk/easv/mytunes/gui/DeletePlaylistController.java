@@ -21,6 +21,7 @@ public class DeletePlaylistController {
 
     public void btnDeletePlaylistFromDatabase(ActionEvent actionEvent) {
         MusicFunctions.getInstance().deletePlaylist(playlist);
+        mainController.clearCurrentPlaylist();
         mainController.refreshTable();
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
