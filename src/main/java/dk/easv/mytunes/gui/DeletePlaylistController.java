@@ -11,14 +11,17 @@ public class DeletePlaylistController {
     private MyTunesController mainController;
     private Playlist playlist;
 
+    // Sets the playlist to delete
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
     }
 
+    // Sets the main controller reference for refreshing the main view
     public void setMainController(MyTunesController mainController) {
         this.mainController = mainController;
     }
 
+    // Deletes the playlist from database and refreshes the main view
     public void btnDeletePlaylistFromDatabase(ActionEvent actionEvent) {
         MusicFunctions.getInstance().deletePlaylist(playlist);
         mainController.clearCurrentPlaylist();

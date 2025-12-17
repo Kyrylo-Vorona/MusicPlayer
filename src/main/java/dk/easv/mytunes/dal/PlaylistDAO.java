@@ -1,8 +1,6 @@
 package dk.easv.mytunes.dal;
 
-import dk.easv.mytunes.be.Category;
 import dk.easv.mytunes.be.Playlist;
-import dk.easv.mytunes.be.Song;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,30 +8,35 @@ import java.util.List;
 public class PlaylistDAO {
     private final ConnectionManager cm;
 
+    // Creates a PlaylistDAO and initializes the database connection manager
     public PlaylistDAO () {
         cm = new ConnectionManager();
     }
 
+    // Deletes the selected playlist and all its song relations from the database
     public void deletePlaylist(Playlist playlist) {
         try (Connection con = cm.getConnection()) {
-            String sql = "DELETE FROM PlaylistSongs WHERE playlistId=?" +
-                         "DELETE FROM Playlists WHERE id=?";
-            PreparedStatement pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, playlist.getId());
-            pstmt.setInt(2, playlist.getId());
-            pstmt.execute();
+            String sql1 = "DELETE FROM PlaylistSongs WHERE PlaylistId = ?";
+            PreparedStatement pstmt1 = con.prepareStatement(sql1);
+            pstmt1.setInt(1, playlist.getId());
+            pstmt1.executeUpdate();
+
+            String sql2 = "DELETE FROM Playlists WHERE Id = ?";
+            PreparedStatement pstmt2 = con.prepareStatement(sql2);
+            pstmt2.setInt(1, playlist.getId());
+            pstmt2.executeUpdate();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void addPlaylist(String name, int songs, int seconds) {
+    // Adds new playlist
+    public void addPlaylist(String name) {
         try (Connection con = cm.getConnection()) {
-            String sql = "INSERT INTO Playlists (Name, Songs, Time) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Playlists (Name) VALUES (?)";
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setString(1, name);
-            pstmt.setInt(2, songs);
-            pstmt.setInt(3, seconds);
             pstmt.executeUpdate();
         }
         catch (SQLException e)  {
@@ -41,6 +44,7 @@ public class PlaylistDAO {
         }
     }
 
+    // Updates the name of the selected playlist in the database
     public void editPlaylist(Playlist playlist) {
         try (Connection con = cm.getConnection()) {
             String sql = "UPDATE Playlists SET Name = ? WHERE Id = ?";
@@ -53,6 +57,7 @@ public class PlaylistDAO {
         }
     }
 
+    // Returns a list with all playlists
     public List<Playlist> getAllPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
 
@@ -64,9 +69,7 @@ public class PlaylistDAO {
             while (rs.next()) {
                 playlists.add(new Playlist(
                         rs.getInt("Id"),
-                        rs.getString("Name"),
-                        rs.getInt("Songs"),
-                        rs.getInt("Time")
+                        rs.getString("Name")
                 ));
             }
 

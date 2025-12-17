@@ -9,6 +9,7 @@ public class Song {
     private int seconds;
     private String path;
 
+    // Constructor
     public Song(int id, String title, String artist, Category category, int seconds,  String path) {
         this.id = id;
         this.title = title;

@@ -8,10 +8,12 @@ import java.util.List;
 public class CategoryDAO {
     private ConnectionManager cm;
 
+    // Creates a CategoryDAO and initializes the database connection manager
     public CategoryDAO() {
         cm = new ConnectionManager();
     }
 
+    // Returns all categories from database
     public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
 
@@ -34,6 +36,7 @@ public class CategoryDAO {
         return categories;
     }
 
+    // Adds a new category to the database
     public Category addCategory(String name) {
         try (Connection con = cm.getConnection()) {
             String sql = "INSERT INTO Categories (Name) VALUES (?)";

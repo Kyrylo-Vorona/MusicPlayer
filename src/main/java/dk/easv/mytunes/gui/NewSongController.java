@@ -9,10 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -23,6 +20,8 @@ import java.util.ResourceBundle;
 public class NewSongController implements Initializable {
 
     @FXML
+    private Label lblError;
+    @FXML
     private ComboBox<Category> categoryComboBox;
     @FXML
     private TextField titleTextField;
@@ -32,22 +31,18 @@ public class NewSongController implements Initializable {
     private TextField timeTextField;
     @FXML
     private TextField filePathTextField;
-    @FXML
-    private Button chooseButton;
-    @FXML
-    private Button saveButton;
-    @FXML
-    private Button cancelButton;
 
     private MyTunesController mainController;
     private ObservableList<Category> categories;
     private MusicFunctions mf = MusicFunctions.getInstance();
     private Song songToEdit;
 
+    // Sets the main controller reference for refreshing the main view
     public void setMainController(MyTunesController controller) {
         this.mainController = controller;
     }
 
+    // Initializes the controller and loads categories into the ComboBox
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         readDataIntoComboBox();
@@ -59,6 +54,7 @@ public class NewSongController implements Initializable {
         categoryComboBox.setItems(categories);
     }
 
+    // Sets the song to edit and fills the text fields with songs data
     public void setSongToEdit(Song song) {
         this.songToEdit = song;
         titleTextField.setText(song.getTitle());
@@ -68,11 +64,17 @@ public class NewSongController implements Initializable {
         categoryComboBox.setValue(song.getCategory());
     }
 
-
+    // Handles adding a new song or editing an existing one
+    // Validates input, parses time format (mm:ss)
     @FXML
     private void onAddSongButtonClick(ActionEvent event) {
         if (mainController.getSongIsEditing()) {
             if (songToEdit != null) {
+                if (titleTextField.getText().trim().isEmpty() || artistTextField.getText().trim().isEmpty() || timeTextField.getText().trim().isEmpty() || filePathTextField.getText().trim().isEmpty() || categoryComboBox.getValue() == null) {
+                    lblError.setText("Please fill all the fields");
+                    return;
+                }
+                lblError.setText("");
                 songToEdit.setTitle(titleTextField.getText());
                 songToEdit.setArtist(artistTextField.getText());
                 int time;
@@ -94,6 +96,11 @@ public class NewSongController implements Initializable {
             }
         }
         else {
+            if (titleTextField.getText().trim().isEmpty() || artistTextField.getText().trim().isEmpty() || timeTextField.getText().trim().isEmpty() || filePathTextField.getText().trim().isEmpty() || categoryComboBox.getValue() == null) {
+                lblError.setText("Please fill all the fields");
+                return;
+            }
+            lblError.setText("");
             String title = titleTextField.getText();
             String artist = artistTextField.getText();
             int time;
@@ -102,7 +109,7 @@ public class NewSongController implements Initializable {
                 String[] parts = timeTextField.getText().split(":");
                 time = Integer.parseInt(parts[0]) * 60 + Integer.parseInt(parts[1]);
             } catch (Exception ex) {
-                System.out.println("Invalid time format");
+                lblError.setText("Invalid time format");
                 return;
             }
 
@@ -116,12 +123,14 @@ public class NewSongController implements Initializable {
         }
     }
 
+    // Closes the NewSong.fxml without saving changes
     @FXML
     private void onCancelButtonClick(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }
 
+    // Opens a dialog for choosing song file
     @FXML
     private void chooseSongButtonClick(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -136,6 +145,7 @@ public class NewSongController implements Initializable {
         }
     }
 
+    // Opens a dialog for adding a new category
     @FXML
     private void onAddCategoryMoreClick() {
         TextInputDialog dialog = new TextInputDialog();

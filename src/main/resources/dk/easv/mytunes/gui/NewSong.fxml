@@ -58,5 +58,10 @@
       <Button fx:id="chooseButton" layoutX="258.0" layoutY="180.0" mnemonicParsing="false" onAction="#chooseSongButtonClick" text="Choose..." />
       <Button fx:id="cancelButton" layoutX="264.0" layoutY="254.0" mnemonicParsing="false" onAction="#onCancelButtonClick" text="Cancel" />
       <Button fx:id="saveButton" layoutX="331.0" layoutY="254.0" mnemonicParsing="false" onAction="#onAddSongButtonClick" text="Save" />
+      <Label fx:id="lblError" layoutX="34.0" layoutY="258.0" textFill="#df0c0c">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

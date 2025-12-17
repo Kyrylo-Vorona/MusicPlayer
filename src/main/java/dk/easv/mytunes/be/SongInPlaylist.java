@@ -4,6 +4,7 @@ public class SongInPlaylist {
     private Song song;
     private int position;
 
+    // Constructor
     public SongInPlaylist(Song song, int position) {
         this.song = song;
         this.position = position;

@@ -1,9 +1,6 @@
 package dk.easv.mytunes.dal;
 
-import dk.easv.mytunes.be.Playlist;
-import dk.easv.mytunes.be.PlaylistSongs;
-import dk.easv.mytunes.be.Song;
-import dk.easv.mytunes.be.SongInPlaylist;
+import dk.easv.mytunes.be.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,23 +13,31 @@ import java.util.List;
 public class PlaylistSongsDAO {
     private final ConnectionManager cm;
 
+    // Creates a PlaylistSongsDAO and initializes the database connection manager
     public PlaylistSongsDAO () {
         cm = new ConnectionManager();
     }
 
+    // Loads all songs in the selected playlist and their positions
+    // Returns list of SongInPlaylist in selected playlist
     public List<SongInPlaylist> getSongsInPlaylist(int playlistId) {
         List<SongInPlaylist> songsInPlaylist = new ArrayList<>();
 
         try (Connection con = cm.getConnection()) {
-            String sql = "SELECT " +
-                    "ps.Position, " +
-                    "s.Id, " +
-                    "s.Title, " +
-                    "s.[File] " +
-                    "FROM PlaylistSongs AS ps " +
-                    "JOIN Songs AS s ON ps.SongId = s.Id " +
-                    "WHERE ps.PlaylistId = ? " +
-                    "ORDER BY ps.Position;";
+            String sql = "SELECT\n" +
+                    "  ps.Position,\n" +
+                    "  s.Id,\n" +
+                    "  s.Title,\n" +
+                    "  s.Artist,\n" +
+                    "  s.Time,\n" +
+                    "  s.[File],\n" +
+                    "  c.Id   AS CategoryId,\n" +
+                    "  c.Name AS CategoryName\n" +
+                    "FROM PlaylistSongs ps\n" +
+                    "JOIN Songs s ON ps.SongId = s.Id\n" +
+                    "LEFT JOIN Categories c ON s.CategoryId = c.Id\n" +
+                    "WHERE ps.PlaylistId = ?\n" +
+                    "ORDER BY ps.Position;\n";
 
             PreparedStatement pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, playlistId);
@@ -43,11 +48,15 @@ public class PlaylistSongsDAO {
                 Song song = new Song(
                         rs.getInt("Id"),
                         rs.getString("Title"),
-                        null,
-                        null,
-                        0,
+                        rs.getString("Artist"),
+                        new Category(
+                                rs.getInt("CategoryId"),
+                                rs.getString("CategoryName")
+                        ),
+                        rs.getInt("Time"),
                         rs.getString("File")
                 );
+
 
                 songsInPlaylist.add(new SongInPlaylist(
                         song,
@@ -62,69 +71,33 @@ public class PlaylistSongsDAO {
         return songsInPlaylist;
     }
 
+    // Adds song to playlist
     public void addSongToPlaylist(int position, Song song, Playlist playlist) {
         try (Connection con = cm.getConnection()) {
-            String insertSql = "INSERT INTO PlaylistSongs (Position, SongId, PlaylistId) VALUES (?, ?, ?)";
-            String updateSql = "UPDATE Playlists SET Songs = ?, Time = ? WHERE Id = ?";
+            String insertSql =
+                    "INSERT INTO PlaylistSongs (Position, SongId, PlaylistId) VALUES (?, ?, ?)";
             PreparedStatement insert = con.prepareStatement(insertSql);
             insert.setInt(1, position);
             insert.setInt(2, song.getId());
             insert.setInt(3, playlist.getId());
             insert.executeUpdate();
-            playlist.setSongs(playlist.getSongs() + 1);
-            playlist.setSeconds(playlist.getSeconds() + song.getSeconds());
 
-            PreparedStatement update = con.prepareStatement(updateSql);
-            update.setInt(1, playlist.getSongs());
-            update.setInt(2, playlist.getSeconds());
-            update.setInt(3, playlist.getId());
-            update.executeUpdate();
-
-        }
-        catch (SQLException e)  {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
+    // Deletes selected song from playlist and fixes positions
     public void deleteSongFromPlaylist(int position, Playlist playlist, Song song) {
         try (Connection con = cm.getConnection()) {
 
-            String deleteSql =
-                    "DELETE FROM PlaylistSongs " +
-                            "WHERE Position = ? AND PlaylistId = ? AND SongId = ?";
-
+            String deleteSql = "DELETE FROM PlaylistSongs WHERE Position = ? AND PlaylistId = ? AND SongId = ?";
             PreparedStatement delete = con.prepareStatement(deleteSql);
             delete.setInt(1, position);
             delete.setInt(2, playlist.getId());
             delete.setInt(3, song.getId());
             delete.executeUpdate();
 
-            String calcSql =
-                    "SELECT COUNT(*) AS cnt, COALESCE(SUM(s.Time), 0) AS total " +
-                            "FROM PlaylistSongs ps " +
-                            "JOIN Songs s ON ps.SongId = s.Id " +
-                            "WHERE ps.PlaylistId = ?";
-
-            PreparedStatement calc = con.prepareStatement(calcSql);
-            calc.setInt(1, playlist.getId());
-            ResultSet rs = calc.executeQuery();
-
-            int count = 0;
-            int totalSeconds = 0;
-
-            if (rs.next()) {
-                count = rs.getInt("cnt");
-                totalSeconds = rs.getInt("total");
-            }
-
-            String updateSql =
-                    "UPDATE Playlists SET Songs = ?, Time = ? WHERE Id = ?";
-
-            PreparedStatement update = con.prepareStatement(updateSql);
-            update.setInt(1, count);
-            update.setInt(2, totalSeconds);
-            update.setInt(3, playlist.getId());
-            update.executeUpdate();
             fixPositions(playlist.getId());
 
         } catch (SQLException e) {
@@ -132,6 +105,7 @@ public class PlaylistSongsDAO {
         }
     }
 
+    // Selects songs from selected playlist and sets new positions for them
     public void fixPositions(int playlistId) {
         try (Connection con = cm.getConnection()) {
 
@@ -161,6 +135,7 @@ public class PlaylistSongsDAO {
         }
     }
 
+    // Swaps the position of the selected song with the previous song in the playlist
     public void moveUp(int playlistId, int position) {
         if (position <= 1) return;
 
@@ -187,6 +162,7 @@ public class PlaylistSongsDAO {
         }
     }
 
+    // Swaps the position of the selected song with the next song in the playlist
     public void moveDown(int playlistId, int position) {
 
         String sql = "UPDATE PlaylistSongs SET Position = CASE WHEN Position = ? THEN ? WHEN Position = ? THEN ? END WHERE PlaylistId = ? AND Position IN (?, ?)";

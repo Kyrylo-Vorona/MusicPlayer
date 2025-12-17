@@ -41,7 +41,6 @@
                <children>
                   <Label fx:id="lblName" text="(none)" />
                   <Label text=" ... Is playing " />
-                  <Label fx:id="lblDuration" />
                </children>
             </HBox>
             <HBox alignment="TOP_RIGHT">
@@ -135,5 +134,10 @@
             <Insets />
          </VBox.margin>
       </HBox>
+      <Label fx:id="lblError" prefHeight="18.0" prefWidth="1038.0" text=" " textFill="#f70d0d">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
    </children>
 </VBox>
